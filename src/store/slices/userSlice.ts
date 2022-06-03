@@ -8,8 +8,9 @@ interface IUser {
 
 export interface IUserInformation {
   name: string;
-  cpf: string;
   birthDate: Date | null;
+  gender: string;
+  priority: false;
 }
 
 export interface IUserAddress {
@@ -27,7 +28,7 @@ export interface IUserContact {
 }
 
 const initialState: IUser = {
-  information: { name: '', cpf: '', birthDate: null },
+  information: { name: '', birthDate: null, gender: '', priority: false },
   address: {
     zipCode: '',
     street: '',
@@ -42,8 +43,8 @@ const initialState: IUser = {
   },
 };
 
-export const formUserSlice = createSlice({
-  name: 'formUserSlice',
+export const userSlice = createSlice({
+  name: 'userSlice',
   initialState,
   reducers: {
     update: (state, action: PayloadAction<IUser>) => {
@@ -61,6 +62,6 @@ export const formUserSlice = createSlice({
   },
 });
 
-export const { update, updateInformation, updateAddress, updateContact } = formUserSlice.actions;
+export const { update, updateInformation, updateAddress, updateContact } = userSlice.actions;
 
-export default formUserSlice.reducer;
+export default userSlice.reducer;

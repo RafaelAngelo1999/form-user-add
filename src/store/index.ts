@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { configureStore } from '@reduxjs/toolkit';
-import formUserReducer from './slices/formUserSlice';
+import userReducer from './slices/userSlice';
+import activeStepsReducer from './slices/activeStepsSlice';
 
 const reducers = combineReducers({
-  formUser: formUserReducer,
+  user: userReducer,
+  activeSteps: activeStepsReducer,
 });
 
 export const store = configureStore({
