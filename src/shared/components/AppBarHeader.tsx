@@ -9,12 +9,20 @@ const AppBarHeader = () => {
       <AppBar position="static">
         <Toolbar>
           <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-            <MenuIcon />
+            <MenuIcon onClick={() => window.location.reload()} />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Formulario Estudo RHF e YUP
           </Typography>
-          <IconButton size="large" edge="start" color="inherit" aria-label="git" sx={{ mr: 2 }}>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="git"
+            sx={{ mr: 2 }}
+            href="https://github.com/RafaelAngelo1999/"
+            target="_blank"
+          >
             <GitHubIcon />
           </IconButton>
         </Toolbar>

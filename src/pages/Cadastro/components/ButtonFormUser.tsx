@@ -15,12 +15,11 @@ const ButtonFormUser: React.FC = () => {
         color="inherit"
         disabled={activeStepUser === 0}
         onClick={() => dispatch(removeActiveStepUser())}
-        sx={{ mr: 1 }}
       >
         Back
       </Button>
       <Box sx={{ flex: '1 1 auto' }} />
-      <Button type="submit" variant="contained">
+      <Button type="submit" variant="contained" color={activeStepUser === 2 ? 'secondary' : 'primary'}>
         {activeStepUser === 2 ? 'Finish' : 'Next'}
       </Button>
     </Box>

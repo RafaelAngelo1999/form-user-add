@@ -27,7 +27,7 @@ const UserAddress: React.FC = () => {
       number: yup
         .number()
         .required('Number is required')
-        .positive('Number must be a positive number')
+        .positive('Number is invalid')
         .integer('Number must be an integer'),
     })
     .required();
@@ -46,7 +46,7 @@ const UserAddress: React.FC = () => {
     resetAddress();
   }, [userAddress]);
 
-  const createUser = (data: IUserAddress) => {
+  const updateUserAddress = (data: IUserAddress) => {
     dispatch(updateAddress(data));
   };
 
@@ -217,7 +217,7 @@ const UserAddress: React.FC = () => {
       <Box
         component="form"
         onSubmit={handleSubmit((data) => {
-          createUser(data as IUserAddress);
+          updateUserAddress(data as IUserAddress);
           dispatch(addActiveStepUser());
         })}
         noValidate
