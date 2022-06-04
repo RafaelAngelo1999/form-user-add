@@ -8,6 +8,7 @@ interface IUser {
 
 export interface IUserInformation {
   name: string;
+  cpf: string;
   birthDate: Date | null;
   gender: string;
   priority: false;
@@ -28,7 +29,7 @@ export interface IUserContact {
 }
 
 const initialState: IUser = {
-  information: { name: '', birthDate: null, gender: '', priority: false },
+  information: { name: '', cpf: '', birthDate: null, gender: '', priority: false },
   address: {
     zipCode: '',
     street: '',

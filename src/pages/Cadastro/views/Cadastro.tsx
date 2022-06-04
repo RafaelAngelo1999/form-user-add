@@ -4,6 +4,7 @@ import { Box, Button, Step, StepLabel, Stepper, Typography } from '@mui/material
 import StepperGeneric from '../../../shared/components/Stepper/components/StepperGeneric';
 import UserInformation from '../components/UserInformation';
 import { State } from '../../../store';
+import UserAddress from '../components/UserAddress';
 
 const Cadastro = () => {
   const activeStepUser = useSelector((state: State) => state.activeSteps.user);
@@ -35,6 +36,7 @@ const Cadastro = () => {
         })}
       </Stepper>
       <UserInformation />
+      {/* <UserAddress /> */}
     </Box>
   );
 };

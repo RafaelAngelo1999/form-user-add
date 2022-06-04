@@ -1,9 +1,11 @@
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Box, Button } from '@mui/material';
 import { State } from '../../../store';
+import { removeActiveStepUser } from '../../../store/slices/activeStepsSlice';
 
 const ButtonFormUser: React.FC = () => {
+  const dispatch = useDispatch();
   const activeStepUser = useSelector((state: State) => state.activeSteps.user);
 
   return (
@@ -12,7 +14,7 @@ const ButtonFormUser: React.FC = () => {
         variant="contained"
         color="inherit"
         disabled={activeStepUser === 0}
-        onClick={() => console.log('')}
+        onClick={() => dispatch(removeActiveStepUser())}
         sx={{ mr: 1 }}
       >
         Back

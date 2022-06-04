@@ -1,43 +1,26 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { useDispatch } from 'react-redux';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import InputMask from 'react-input-mask';
 import * as yup from 'yup';
-import { addMethod, string } from 'yup';
 import { Box, Checkbox, FormControlLabel, Grid, MenuItem, TextField } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { IUserInformation, updateInformation } from '../../../store/slices/userSlice';
+import { IUserAddress, updateAddress } from '../../../store/slices/userSlice';
 import { GENDERS } from '../../../shared/constants/Gender';
 import { addActiveStepUser } from '../../../store/slices/activeStepsSlice';
 import ButtonFormUser from './ButtonFormUser';
-import { isValidCPF } from '../../../shared/utils/string';
 
-const getMinDate18YearsOld = new Date(new Date().getFullYear() - 18, new Date().getMonth() - 1, new Date().getDay());
-
-const UserInformation: React.FC = () => {
+const UserAddress: React.FC = () => {
   const dispatch = useDispatch();
 
   const schema = yup
     .object({
       name: yup.string().required('Name is required').min(5, 'Name must contain at least 5 characters'),
       gender: yup.string().required('Gender is required'),
-      cpf: yup
-        .string()
-        .required('CPF is required')
-        /* eslint-disable-next-line */
-        .matches(/^(\d{3}\.){2}\d{3}\-\d{2}$/, 'Format invalid')
-        .test('isCpfValid', 'CPF invalid', function (value) {
-          return isValidCPF(value);
-        }),
-      birthDate: yup
-        .date()
-        .typeError('Invalid date format. (dd/mm/yyyy)')
-        .required('BirthDate is required')
-        .max(getMinDate18YearsOld, 'Must be of legal age')
-        .min(new Date(0, 0, 1900), 'Data min invalid'),
+      birthDate: yup.date().typeError('Invalid date format. (dd/mm/yyyy)').required('BirthDate is required'),
     })
     .required();
 
@@ -46,8 +29,8 @@ const UserInformation: React.FC = () => {
     resolver: yupResolver(schema),
   });
 
-  const createUser = (data: IUserInformation) => {
-    dispatch(updateInformation(data));
+  const createUser = (data: IUserAddress) => {
+    dispatch(updateAddress(data));
   };
 
   return (
@@ -55,7 +38,7 @@ const UserInformation: React.FC = () => {
       <Box
         component="form"
         onSubmit={handleSubmit((data) => {
-          createUser(data as IUserInformation);
+          createUser(data as IUserAddress);
           dispatch(addActiveStepUser());
         })}
         noValidate
@@ -90,16 +73,8 @@ const UserInformation: React.FC = () => {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <Box mb={4} height={80}>
-                  <InputMask mask="999.999.999-99" value={value || ''} onChange={onChange}>
-                    <TextField
-                      margin="normal"
-                      fullWidth
-                      id="cpf"
-                      label="CPF"
-                      variant="outlined"
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
+                  <InputMask mask="999.999.999-99" value={value} onChange={onChange}>
+                    <TextField id="cpf" label="CPF" variant="outlined" required fullWidth />
                   </InputMask>
                 </Box>
               )}
@@ -107,7 +82,7 @@ const UserInformation: React.FC = () => {
           </Grid>
         </Grid>
 
-        <Grid container spacing={4} rowSpacing={1} mt={3}>
+        <Grid container spacing={4} rowSpacing={1}>
           <Grid item xs={5} height={80}>
             <Controller
               name="gender"
@@ -176,4 +151,4 @@ const UserInformation: React.FC = () => {
   );
 };
 
-export default UserInformation;
+export default UserAddress;
