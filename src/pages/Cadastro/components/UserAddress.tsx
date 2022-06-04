@@ -79,6 +79,7 @@ const UserAddress: React.FC = () => {
               label="ZipCode"
               variant="outlined"
               required
+              autoComplete="off"
               error={!!error}
               helperText={error ? error.message : null}
             />
@@ -101,6 +102,7 @@ const UserAddress: React.FC = () => {
             disabled={!cpfFilled}
             label="City"
             value={value || ''}
+            autoComplete="off"
             required
             onChange={onChange}
             error={!!error}
@@ -124,6 +126,7 @@ const UserAddress: React.FC = () => {
             disabled={!cpfFilled}
             label="Neighborhood"
             required
+            autoComplete="off"
             value={value || ''}
             onChange={onChange}
             error={!!error}
@@ -147,6 +150,7 @@ const UserAddress: React.FC = () => {
             label="Street"
             value={value || ''}
             required
+            autoComplete="off"
             onChange={onChange}
             error={!!error}
             helperText={error ? error.message : null}
@@ -169,6 +173,7 @@ const UserAddress: React.FC = () => {
             label="Number"
             required
             type="number"
+            autoComplete="off"
             value={value || ''}
             onChange={onChange}
             error={!!error}
@@ -190,6 +195,7 @@ const UserAddress: React.FC = () => {
             fullWidth
             label="Complement"
             disabled={!cpfFilled}
+            autoComplete="off"
             value={value || ''}
             onChange={onChange}
             error={!!error}

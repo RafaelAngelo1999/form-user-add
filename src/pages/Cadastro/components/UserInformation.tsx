@@ -61,6 +61,7 @@ const UserInformation: React.FC = () => {
             margin="normal"
             fullWidth
             id="name"
+            autoComplete="off"
             label="Name"
             autoFocus
             required
@@ -140,7 +141,14 @@ const UserInformation: React.FC = () => {
             value={value || null}
             onChange={onChange}
             renderInput={(params) => (
-              <TextField {...params} fullWidth error={!!error} required helperText={error ? error.message : null} />
+              <TextField
+                {...params}
+                fullWidth
+                error={!!error}
+                required
+                autoComplete="off"
+                helperText={error ? error.message : null}
+              />
             )}
           />
         </LocalizationProvider>

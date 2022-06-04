@@ -52,6 +52,7 @@ const UserContact: React.FC = () => {
             autoFocus
             variant="outlined"
             value={value || ''}
+            autoComplete="off"
             onChange={onChange}
             error={!!error}
             helperText={error ? error.message : null}
@@ -72,6 +73,7 @@ const UserContact: React.FC = () => {
               margin="normal"
               fullWidth
               id="cell"
+              autoComplete="off"
               label="Cell"
               variant="outlined"
               error={!!error}
@@ -96,6 +98,7 @@ const UserContact: React.FC = () => {
               id="tell"
               label="Tell"
               variant="outlined"
+              autoComplete="off"
               error={!!error}
               helperText={error ? error.message : null}
             />
