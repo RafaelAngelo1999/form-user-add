@@ -1,6 +1,10 @@
+export const removeDot = (string: string) => {
+  return string.replace(/[^\d]+/g, '');
+};
+
 export const isValidCPF = (cpf: string | undefined) => {
   if (typeof cpf !== 'string') return false;
-  cpf = cpf.replace(/[^\d]+/g, '');
+  cpf = removeDot(cpf);
   if (cpf.length !== 11 || !!cpf.match(/(\d)\1{10}/)) return false;
   const cpfArray = cpf.split('');
   const validator = cpfArray.filter((digit, index, array) => index >= array.length - 2 && digit).map((el) => +el);

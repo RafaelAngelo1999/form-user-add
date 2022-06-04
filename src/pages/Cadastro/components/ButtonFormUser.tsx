@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Button } from '@mui/material';
 import { State } from '../../../store';

@@ -4,7 +4,6 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import InputMask from 'react-input-mask';
 import * as yup from 'yup';
-import { addMethod, string } from 'yup';
 import { Box, Checkbox, FormControlLabel, Grid, MenuItem, TextField } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -29,7 +28,7 @@ const UserInformation: React.FC = () => {
         .required('CPF is required')
         /* eslint-disable-next-line */
         .matches(/^(\d{3}\.){2}\d{3}\-\d{2}$/, 'Format invalid')
-        .test('isCpfValid', 'CPF invalid', function (value) {
+        .test('isCpfValid', 'CPF invalid', function isCpfValid(value) {
           return isValidCPF(value);
         }),
       birthDate: yup
@@ -120,7 +119,6 @@ const UserInformation: React.FC = () => {
                     fullWidth
                     label="Gender"
                     value={value || ''}
-                    defaultValue=""
                     onChange={onChange}
                     error={!!error}
                     helperText={error ? error.message : null}

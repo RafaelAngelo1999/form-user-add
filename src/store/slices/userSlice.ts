@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AddressModel } from '../../repository/models/AddressModel';
 
 interface IUser {
   information: IUserInformation;
@@ -19,6 +20,7 @@ export interface IUserAddress {
   street: string;
   number: number;
   neighborhood: string;
+  city: string;
   complement?: string;
 }
 
@@ -35,6 +37,7 @@ const initialState: IUser = {
     street: '',
     number: 0,
     neighborhood: '',
+    city: '',
     complement: '',
   },
   contact: {
@@ -60,9 +63,15 @@ export const userSlice = createSlice({
     updateContact: (state, action: PayloadAction<IUserContact>) => {
       state.contact = action.payload;
     },
+    updateAddressSearch: (state, action: PayloadAction<AddressModel>) => {
+      state.address.city = action.payload.city;
+      state.address.neighborhood = action.payload.neighborhood;
+      state.address.street = action.payload.street;
+      state.address.zipCode = action.payload.zipCode;
+    },
   },
 });
 
-export const { update, updateInformation, updateAddress, updateContact } = userSlice.actions;
+export const { update, updateInformation, updateAddress, updateContact, updateAddressSearch } = userSlice.actions;
 
 export default userSlice.reducer;

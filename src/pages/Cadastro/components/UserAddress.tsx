@@ -1,36 +1,215 @@
-import React, { ReactNode } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import InputMask from 'react-input-mask';
 import * as yup from 'yup';
-import { Box, Checkbox, FormControlLabel, Grid, MenuItem, TextField } from '@mui/material';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { IUserAddress, updateAddress } from '../../../store/slices/userSlice';
-import { GENDERS } from '../../../shared/constants/Gender';
+import { Box, Grid, TextField } from '@mui/material';
+import { IUserAddress, updateAddress, updateAddressSearch } from '../../../store/slices/userSlice';
 import { addActiveStepUser } from '../../../store/slices/activeStepsSlice';
 import ButtonFormUser from './ButtonFormUser';
+import { removeDot } from '../../../shared/utils/string';
+import AddressService from '../../../services/AddressService';
+import { State } from '../../../store';
 
 const UserAddress: React.FC = () => {
   const dispatch = useDispatch();
+  const userAddress = useSelector((state: State) => state.user.address);
+
+  const cpfFilled = useSelector((state: State) => state.user.address).zipCode?.length === 8;
 
   const schema = yup
     .object({
-      name: yup.string().required('Name is required').min(5, 'Name must contain at least 5 characters'),
-      gender: yup.string().required('Gender is required'),
-      birthDate: yup.date().typeError('Invalid date format. (dd/mm/yyyy)').required('BirthDate is required'),
+      zipCode: yup.string().required('CEP is required').min(8, 'CEP Invalid'),
+      city: yup.string().required('City is required'),
+      neighborhood: yup.string().required('Neighborhood is required'),
+      street: yup.string().required('Street is required'),
+      number: yup
+        .number()
+        .required('Number is required')
+        .positive('Number must be a positive number')
+        .integer('Number must be an integer'),
     })
     .required();
 
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control, reset } = useForm({
     mode: 'onSubmit',
     resolver: yupResolver(schema),
   });
 
+  useEffect(() => {
+    const resetAddress = () => {
+      if (userAddress) {
+        reset(userAddress);
+      }
+    };
+    resetAddress();
+  }, [userAddress]);
+
   const createUser = (data: IUserAddress) => {
     dispatch(updateAddress(data));
+  };
+
+  const handlerBlurAddressSearch = async (cep: string) => {
+    const cepNoMask = removeDot(cep);
+    if (cepNoMask.length === 8) {
+      const result = await AddressService.getAddress(cepNoMask);
+      dispatch(updateAddressSearch(result));
+      // console.log(result);
+    }
+  };
+
+  // #region elements page
+  const inputZipCode = (
+    <Controller
+      name="zipCode"
+      control={control}
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
+        <Box mb={4} height={80}>
+          <InputMask
+            mask="99999-999"
+            value={value || ''}
+            onChange={onChange}
+            onBlur={() => handlerBlurAddressSearch(value)}
+          >
+            <TextField
+              id="zipCode"
+              margin="normal"
+              fullWidth
+              label="ZipCode"
+              variant="outlined"
+              required
+              error={!!error}
+              helperText={error ? error.message : null}
+            />
+          </InputMask>
+        </Box>
+      )}
+    />
+  );
+
+  const inputCity = (
+    <Controller
+      name="city"
+      control={control}
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
+        <Box mb={4} height={80}>
+          <TextField
+            id="city"
+            margin="normal"
+            fullWidth
+            disabled={!cpfFilled}
+            label="City"
+            value={value || ''}
+            required
+            onChange={onChange}
+            error={!!error}
+            helperText={error ? error.message : null}
+          />
+        </Box>
+      )}
+    />
+  );
+
+  const inputNeighborhood = (
+    <Controller
+      name="neighborhood"
+      control={control}
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
+        <Box mb={4} height={80}>
+          <TextField
+            id="neighborhood"
+            margin="normal"
+            fullWidth
+            disabled={!cpfFilled}
+            label="Neighborhood"
+            required
+            value={value || ''}
+            onChange={onChange}
+            error={!!error}
+            helperText={error ? error.message : null}
+          />
+        </Box>
+      )}
+    />
+  );
+
+  const inputStreet = (
+    <Controller
+      name="street"
+      control={control}
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
+        <Box mb={4} height={80}>
+          <TextField
+            id="street"
+            fullWidth
+            disabled={!cpfFilled}
+            label="Street"
+            value={value || ''}
+            required
+            onChange={onChange}
+            error={!!error}
+            helperText={error ? error.message : null}
+          />
+        </Box>
+      )}
+    />
+  );
+
+  const inputNumber = (
+    <Controller
+      name="number"
+      control={control}
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
+        <Box mb={4} height={80}>
+          <TextField
+            id="number"
+            fullWidth
+            disabled={!cpfFilled}
+            label="Number"
+            required
+            type="number"
+            value={value || ''}
+            onChange={onChange}
+            error={!!error}
+            helperText={error ? error.message : null}
+          />
+        </Box>
+      )}
+    />
+  );
+
+  const inputComplement = (
+    <Controller
+      name="complement"
+      control={control}
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
+        <Box mb={4} height={80}>
+          <TextField
+            id="complement"
+            fullWidth
+            label="Complement"
+            disabled={!cpfFilled}
+            value={value || ''}
+            onChange={onChange}
+            error={!!error}
+            helperText={error ? error.message : null}
+          />
+        </Box>
+      )}
+    />
+  );
+  // #endregion elements page
+
+  const elementsPage = {
+    inputs: {
+      zipCode: inputZipCode,
+      city: inputCity,
+      neighborhood: inputNeighborhood,
+      street: inputStreet,
+      number: inputNumber,
+      complement: inputComplement,
+    },
   };
 
   return (
@@ -45,103 +224,26 @@ const UserAddress: React.FC = () => {
         sx={{ mt: 1 }}
       >
         <Grid container spacing={4} rowSpacing={1}>
-          <Grid item xs={6} height={80}>
-            <Controller
-              name="name"
-              control={control}
-              render={({ field: { onChange, value }, fieldState: { error } }) => (
-                <Box mb={4} height={80}>
-                  <TextField
-                    margin="normal"
-                    fullWidth
-                    id="name"
-                    label="Name"
-                    autoFocus
-                    variant="outlined"
-                    value={value || ''}
-                    onChange={onChange}
-                    error={!!error}
-                    helperText={error ? error.message : null}
-                  />
-                </Box>
-              )}
-            />
+          <Grid item xs={4} height={80}>
+            {elementsPage.inputs.zipCode}
           </Grid>
-          <Grid item xs={6} height={80}>
-            <Controller
-              name="cpf"
-              control={control}
-              render={({ field: { onChange, value }, fieldState: { error } }) => (
-                <Box mb={4} height={80}>
-                  <InputMask mask="999.999.999-99" value={value} onChange={onChange}>
-                    <TextField id="cpf" label="CPF" variant="outlined" required fullWidth />
-                  </InputMask>
-                </Box>
-              )}
-            />
+          <Grid item xs={3} height={80}>
+            {elementsPage.inputs.city}
+          </Grid>
+          <Grid item xs={5} height={80}>
+            {elementsPage.inputs.neighborhood}
           </Grid>
         </Grid>
 
-        <Grid container spacing={4} rowSpacing={1}>
+        <Grid container spacing={4} rowSpacing={1} mt={3}>
           <Grid item xs={5} height={80}>
-            <Controller
-              name="gender"
-              control={control}
-              render={({ field: { onChange, value }, fieldState: { error } }) => (
-                <Box height={100}>
-                  <TextField
-                    id="gender"
-                    select
-                    fullWidth
-                    label="Gender"
-                    value={value || ''}
-                    defaultValue=""
-                    onChange={onChange}
-                    error={!!error}
-                    helperText={error ? error.message : null}
-                  >
-                    {GENDERS.map((option) => (
-                      <MenuItem key={option} value={option}>
-                        {option}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Box>
-              )}
-            />
+            {elementsPage.inputs.street}
           </Grid>
-          <Grid item xs={4} height={80}>
-            <Controller
-              name="birthDate"
-              control={control}
-              render={({ field: { onChange, value }, fieldState: { error } }) => (
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    label="Birth Date"
-                    openTo="year"
-                    views={['year', 'month', 'day']}
-                    inputFormat="dd/MM/yyyy"
-                    value={value || null}
-                    onChange={onChange}
-                    renderInput={(params) => (
-                      <TextField {...params} fullWidth error={!!error} helperText={error ? error.message : null} />
-                    )}
-                  />
-                </LocalizationProvider>
-              )}
-            />
+          <Grid item xs={2} height={80}>
+            {elementsPage.inputs.number}
           </Grid>
-          <Grid item xs={3} height={80}>
-            <Controller
-              name="priority"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <FormControlLabel
-                  control={<Checkbox checked={value || false} onChange={onChange} name="priority" />}
-                  label="Priority"
-                />
-              )}
-            />
+          <Grid item xs={5} height={80}>
+            {elementsPage.inputs.complement}
           </Grid>
         </Grid>
 
