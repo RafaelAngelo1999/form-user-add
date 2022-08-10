@@ -1,6 +1,6 @@
 import { Box, Button, Step, StepLabel, Stepper, Typography } from '@mui/material';
 import React from 'react';
-import { IStepperGeneric } from '../../../interfaces/Steps/IStepperGeneric';
+import { IStepperGeneric } from '../../../interfaces/Steps/IStepperGenerics';
 
 interface IStepperGenericProps {
   steps: IStepperGeneric[];

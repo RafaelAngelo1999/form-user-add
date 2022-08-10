@@ -18,7 +18,13 @@ const FinishFormUser: React.FC = () => {
       </Button>
       <Grid container direction="row" justifyContent="center" mt={3}>
         <Typography variant="body1" sx={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
-          {JSON.stringify(user, null, '\t')}
+          {JSON.stringify(user.information, null, '\t')}
+        </Typography>
+        <Typography variant="body1" sx={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
+          {JSON.stringify(user.address, null, '\t')}
+        </Typography>
+        <Typography variant="body1" sx={{ wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
+          {JSON.stringify(user.contact, null, '\t')}
         </Typography>
       </Grid>
     </Grid>
